@@ -1,6 +1,10 @@
-# ocr-sample
+# shanghai-nucleic-acid-ocr-vue
 
-> ocr sample vue front end
+a simple vue.js front end for shanghai nucleic acid test screenshot OCR
+
+See back end and ocr script for reference: 
+
+https://github.com/Song-Gq/shanghai-nucleic-acid-ocr
 
 ## Build Setup
 
