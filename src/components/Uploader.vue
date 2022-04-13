@@ -1,12 +1,12 @@
 <template>
   <div style="margin-top: 30px">
+    <div v-show="in_prog">
+    {{prog_text}}
+    <el-progress :percentage="prog" style="margin: 5px auto 50px auto; width: 80%"
+                 :text-inside="true" :stroke-width="26" :status="prog_stat"></el-progress>
+    </div>
     <el-row :gutter="40">
-      <el-col :span="12">
-        <div v-show="in_prog" >
-          {{prog_text}}
-          <el-progress :percentage="prog" style="margin: 5px auto 20px auto; width: 80%"
-                       :text-inside="true" :stroke-width="26" :status="prog_stat"></el-progress>
-        </div>
+      <el-col :span="2">
         <el-upload
           class="upload-demo"
           action="#"
@@ -14,19 +14,72 @@
           :auto-upload="false"
           :on-change="handleChange"
           :file-list="fileList"
+          :disabled="in_prog"
+          :show-file-list="false"
+          style="float: left; margin-left: 150%">
+          <el-button slot="trigger" size="small" type="primary" :disabled="in_prog">选取文件</el-button>
+        </el-upload>
+      </el-col>
+      <el-col :span="8" style="pointer-events: none">
+        <el-upload
+          class="upload"
+          ref="upload"
+          action="#"
+          :multiple="true"
+          :auto-upload="false"
+          :on-change="handleChange"
+          :file-list="fileList"
           :disabled="in_prog">
           <!--      <el-button size="small" type="primary">点击上传</el-button>-->
-          <el-button slot="trigger" size="small" type="primary" :disabled="in_prog">选取文件</el-button>
-          <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload"
-                     :disabled="in_prog">开始识别</el-button>
-          <div slot="tip" class="el-upload__tip">批量上传核酸检测截图JPEG文件，每张建议不超过200KB</div>
+          <el-button slot="trigger" size="small" type="primary" :disabled="in_prog"
+                     style="pointer-events: auto">选取文件夹</el-button>
+          <div slot="tip" class="el-upload__tip" style="margin-top: 15px">
+            批量上传核酸检测截图JPEG文件，每张建议不超过200KB</div>
+          <div slot="tip" class="el-upload__tip" style="margin-top: 5px">
+            选取文件数：{{chosenfilenum}}</div>
         </el-upload>
+      </el-col>
+      <el-col :span="2">
+        <el-button style="float: right; margin-right: 150%;" size="small" type="success"
+                   v-if="fileList.length === 0" :disabled="true">开始识别</el-button>
+        <el-button style="float: right; margin-right: 150%;;" size="small" type="success" @click="submitUpload"
+                   v-if="fileList.length !== 0" :disabled="in_prog">开始识别</el-button>
+        <!--          <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload"
+                             v-if="fileList.length !== 0">re-recog (only for test)</el-button>-->
       </el-col>
       <el-col :span="12">
         <template>
+          <el-result icon="warning" title="提请注意" subTitle="以下结果请人工复核" v-if="misData.length !== 0"
+            style="padding-top: 20px">
+          </el-result>
+          <el-table
+            :data="misData" v-if="misData.length !== 0"
+            style="width: 100%; margin-bottom: 50px">
+            <el-table-column
+              prop="date"
+              label="日期"
+              width="180">
+            </el-table-column>
+            <el-table-column
+              prop="name"
+              label="姓名"
+              width="180">
+            </el-table-column>
+            <el-table-column
+              prop="type"
+              label="类型">
+            </el-table-column>
+            <el-table-column
+              prop="result"
+              label="结果">
+            </el-table-column>
+          </el-table>
+          识别文件数：{{resultfilenum}}
+          <el-button size="small" type="success" @click="export2excel" style="margin: 0 auto 20px 50px"
+                     v-if="tableData.length !== 0">导出至Excel</el-button>
           <el-table
             :data="tableData"
-            style="width: 100%">
+            style="width: 100%; margin-top: 10px">
             <el-table-column
               prop="date"
               label="日期"
@@ -65,56 +118,100 @@ export default {
       prog_stat: null,
       prog_text: "正在上传识别，请耐心等待...",
       tableData: [],
-      timer: null
+      misData: [],
+      timer: null,
+      f_exist: false,
+      server_available: false
     };
+  },
+  computed: {
+    chosenfilenum: function () {
+      return this.fileList.length
+    },
+    resultfilenum: function () {
+      return this.tableData.length
+    }
   },
   methods: {
     handleChange(file, fileList) {
+      let pos = file.name.lastIndexOf('.')
+      let suffix = file.name.substring(pos, file.name.length)
+      const isJPGorPNG = (suffix === '.jpeg') || (suffix === '.jpg') || (suffix === '.png');
+      const isLt1M = file.size / 1024 / 1024 < 1;
+      if (!isJPGorPNG) {
+        this.$message.error('上传图片只能是 JPG/PNG 格式!');
+        fileList.pop()
+      }
+      if (!isLt1M) {
+        this.$message.error('上传图片大小不能超过 1MB!');
+        fileList.pop()
+      }
+      if (fileList.length > 200) {
+        this.$message.error('单次识别数量不能超过 200!');
+        fileList.pop()
+      }
       this.fileList = fileList;
     },
     submitUpload() {
-      this.in_prog = true
-      this.getProgress()
-      // 创建新的数据对象
-      let formData = new FormData();
-      let id = 1
-      // 将上传的文件放到数据对象中
-      this.fileList.forEach(file => {
-        formData.append("id=" + id.toString() + "=" + file.name, file.raw);
-        // this.fileList.name.push(file.name);
-        id += 1
-      });
-      // console.log("提交前",formData.getAll('file'));
+      this.getToken().then(response => {
+        // console.log(response)
+        window.localStorage.setItem('token', response.data)
+        this.server_available = true
+        this.in_prog = true
+        this.getProgress()
+        // 创建新的数据对象
+        let formData = new FormData();
+        let id = 1
+        // 将上传的文件放到数据对象中
+        this.fileList.forEach(file => {
+          formData.append("id=" + id.toString() + "=" + file.name, file.raw);
+          // this.fileList.name.push(file.name);
+          id += 1
+        });
+        // console.log("提交前",formData.getAll('file'));
 
-      // 文件名
-      // formData.append('fileName', this.fileList.name);
-      // 自定义上传
-      this.uploadFile(formData).then(response => {
-        console.log(response);
-        this.prog = 100
-        this.prog_stat = "success"
-        this.prog_text = "识别成功，刷新页面可重新上传"
-        this.clearTimer()
-        let res_d = response.data
-        let res = res_d.res
-        for (let i in res) {
-          // console.log(res[i][3])
-          this.tableData.push({'date': res[i][3], 'name': res[i][2], 'type': res[i][1], 'result': res[i][4]})
-        }
-        // if(response.code == 200){
-        //   this.$refs.upload.clearFiles();
-        //   this.msgSuccess('上传成功！');
-        // }else{
-        //   this.$message.error(response.msg);
-        // }
+        // 文件名
+        // formData.append('fileName', this.fileList.name);
+        // 自定义上传
+        this.uploadFile(formData).then(response => {
+          // console.log(response);
+          this.prog = 100
+          this.prog_stat = "success"
+          this.prog_text = "识别成功，刷新页面可重新上传"
+          this.clearTimer()
+          let res_d = response.data
+          let res = res_d.res
+          for (let i in res) {
+            // console.log(res[i][3])
+            this.tableData.push({'date': res[i][2], 'name': res[i][1], 'type': res[i][0], 'result': res[i][3]})
+          }
+          let mis = res_d.mis
+          if(mis !== null) {
+            for (let i in mis) {
+              // console.log(res[i][3])
+              this.misData.push({'date': mis[i][2], 'name': mis[i][1], 'type': mis[i][0], 'result': mis[i][3]})
+            }
+          }
+          // if(response.code == 200){
+          //   this.$refs.upload.clearFiles();
+          //   this.msgSuccess('上传成功！');
+          // }else{
+          //   this.$message.error(response.msg);
+          // }
+        })
+          .catch(error => {
+            console.log(error)
+            this.$message.error('上传识别失败！');
+            this.prog_stat = "exception"
+            this.prog_text = "请刷新页面重试"
+            this.clearTimer()
+          });
       })
         .catch(error => {
           console.log(error)
-          this.$message.error('上传识别失败！');
-          this.prog_stat = "exception"
-          this.prog_text = "请刷新页面重试"
-          this.clearTimer()
-        });
+          this.server_available = false
+          this.$message.error('服务当前同时使用人数过多！请稍后重试...');
+        })
     },
     uploadFile(params) {
       // for(var pair of params.entries()) {
@@ -127,7 +224,16 @@ export default {
       this.timer = setInterval(() => {  //创建定时器
         this.getStatus().then(response => {
           // console.log(response);
-          this.prog = Math.round(response.data * 100)
+          if(response.data === -1) {
+            this.$message.warning('进度获取出现问题...暂不显示实时进度');
+            this.clearTimer()
+          }
+          else {
+            this.prog = Math.round(response.data * 100)
+            if(this.prog === 100) {
+              this.clearTimer()
+            }
+          }
         })
         .catch(error => {
           this.$message.warning('进度获取出现问题...暂不显示实时进度');
@@ -137,20 +243,67 @@ export default {
     },
     getStatus() {
       return this.$axios.get('http://127.0.0.1:5000/api/getprog', {params: {
-          // ID !!!!!
-          proc_ID: 1,
-          headers: {token: window.localStorage.getItem('token')}
+          token: window.localStorage.getItem('token'), timeout: 2000
         }})
     },
     clearTimer() {//清除定时器
       clearInterval(this.timer);
       this.timer = null;
+    },
+    export2excel() {
+      this.getExcel().then(response => {
+        const blob = new Blob([response.data], {type: 'application/vnd.ms-excel'})
+        const link = document.createElement('a')
+        let d = new Date()
+        link.download = "核酸检测报告-"
+          + d.getFullYear() + "-"
+          + d.getMonth() + "-"
+          + d.getDate() + "-"
+          + d.getHours() + '-'
+          + d.getMinutes() + "-"
+          + d.getSeconds() + ".xlsx" // a标签添加属性
+        link.style.display = 'none'
+        link.href = URL.createObjectURL(blob)
+        document.body.appendChild(link)
+        link.click() // 执行下载
+        URL.revokeObjectURL(link.href)  // 释放 blob 对象
+        document.body.removeChild(link)
+      })
+    },
+    getExcel() {
+      return this.$axios.get('http://127.0.0.1:5000/api/getexcel', {params: {
+          token: window.localStorage.getItem('token')}, responseType: 'arraybuffer'})
+    },
+    getToken() {
+      return this.$axios.get('http://127.0.0.1:5000/api/gettoken', {params: {
+        }})
+    },
+    destroyToken() {
+      let t = window.localStorage.getItem('token')
+      if(t != null) {
+        return this.$axios.delete('http://127.0.0.1:5000/api/destroytoken',{params: {
+            token: t}
+      })}
     }
   },
   mode: 'history',
   beforeDestroy() {
     clearInterval(this.timer);
     this.timer = null;
+  },
+  beforeMount() {
+    window.localStorage.removeItem('token')
+    this.server_available = false
+  },
+  mounted() {
+    window.addEventListener('beforeunload', (event) => {
+      // this.destroyToken()
+      // event.preventDefault()
+  })},
+  created() {
+    this.$nextTick(() => {
+      this.$refs.upload.$children[0].$refs.input.webkitdirectory = true
+    })
   }
 }
 </script>

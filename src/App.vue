@@ -4,10 +4,11 @@
       <el-header>
         <el-row type="flex" class="row-bg" justify="space-between" style="height: 100%">
           <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect"
-                   style="height: 100%">
+                   style="height: 100%;">
             <el-menu-item index="1">Nucleic Acid Test Screenshot OCR</el-menu-item>
           </el-menu>
-          <el-image :src="require('@/assets/logo.png')" fit="scale-down" style="height: 80%"></el-image>
+          <el-image :src="require('@/assets/logo.png')" fit="scale-down"
+                    style="height: 80%; margin: auto 10px auto auto"></el-image>
         </el-row>
       </el-header>
       <el-main>
@@ -41,6 +42,6 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  margin: 60px;
 }
 </style>
