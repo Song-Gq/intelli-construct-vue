@@ -17,7 +17,8 @@
           :disabled="in_prog"
           :show-file-list="false"
           style="float: left; margin-left: 150%">
-          <el-button slot="trigger" size="small" type="primary" :disabled="in_prog">选取文件</el-button>
+          <el-button slot="trigger" size="small" type="primary" :disabled="in_prog" style="font-size: 14px">
+            选取文件</el-button>
         </el-upload>
       </el-col>
       <el-col :span="8" style="pointer-events: none">
@@ -32,18 +33,18 @@
           :disabled="in_prog">
           <!--      <el-button size="small" type="primary">点击上传</el-button>-->
           <el-button slot="trigger" size="small" type="primary" :disabled="in_prog"
-                     style="pointer-events: auto">选取文件夹</el-button>
-          <div slot="tip" class="el-upload__tip" style="margin-top: 15px">
+                     style="pointer-events: auto; font-size: 14px">选取文件夹</el-button>
+          <div slot="tip" class="el-upload__tip" style="margin-top: 15px; font-size: 14px">
             批量上传核酸检测截图JPEG文件，每张建议不超过200KB</div>
-          <div slot="tip" class="el-upload__tip" style="margin-top: 5px">
+          <div slot="tip" class="el-upload__tip" style="margin-top: 5px; font-size: 14px">
             选取文件数：{{chosenfilenum}}</div>
         </el-upload>
       </el-col>
       <el-col :span="2">
-        <el-button style="float: right; margin-right: 150%;" size="small" type="success"
+        <el-button style="float: right; margin-right: 150%; font-size: 14px" size="small" type="success"
                    v-if="fileList.length === 0" :disabled="true">开始识别</el-button>
-        <el-button style="float: right; margin-right: 150%;;" size="small" type="success" @click="submitUpload"
-                   v-if="fileList.length !== 0" :disabled="in_prog">开始识别</el-button>
+        <el-button style="float: right; margin-right: 150%; font-size: 14px" size="small" type="success"
+                   @click="submitUpload" v-if="fileList.length !== 0" :disabled="in_prog">开始识别</el-button>
         <!--          <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload"
                              v-if="fileList.length !== 0">re-recog (only for test)</el-button>-->
       </el-col>
@@ -54,16 +55,15 @@
           </el-result>
           <el-table
             :data="misData" v-if="misData.length !== 0"
-            style="width: 100%; margin-bottom: 50px">
+            :row-style="rowStatus"
+            style="width: 100%; margin-bottom: 50px;">
             <el-table-column
               prop="date"
-              label="日期"
-              width="180">
+              label="日期">
             </el-table-column>
             <el-table-column
               prop="name"
-              label="姓名"
-              width="180">
+              label="姓名">
             </el-table-column>
             <el-table-column
               prop="type"
@@ -74,21 +74,21 @@
               label="结果">
             </el-table-column>
           </el-table>
-          识别文件数：{{resultfilenum}}
-          <el-button size="small" type="success" @click="export2excel" style="margin: 0 auto 20px 50px"
+          <div style="font-size: 14px">
+            识别文件数：{{resultfilenum}}
+          </div>
+          <el-button size="small" type="success" @click="export2excel" style="margin: 20px auto 20px auto"
                      v-if="tableData.length !== 0">导出至Excel</el-button>
           <el-table
-            :data="tableData"
+            :data="tableData" :stripe="true" :max-height="800" size="small"
             style="width: 100%; margin-top: 10px">
             <el-table-column
               prop="date"
-              label="日期"
-              width="180">
+              label="日期">
             </el-table-column>
             <el-table-column
               prop="name"
-              label="姓名"
-              width="180">
+              label="姓名">
             </el-table-column>
             <el-table-column
               prop="type"
@@ -121,7 +121,7 @@ export default {
       misData: [],
       timer: null,
       f_exist: false,
-      server_available: false
+      server_available: false,
     };
   },
   computed: {
@@ -133,6 +133,9 @@ export default {
     }
   },
   methods: {
+    rowStatus({row, rowIndex}) {
+      return {'background-color': 'oldlace'}
+    },
     handleChange(file, fileList) {
       let pos = file.name.lastIndexOf('.')
       let suffix = file.name.substring(pos, file.name.length)
