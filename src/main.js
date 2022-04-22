@@ -10,6 +10,8 @@ import axios from 'axios'
 Vue.config.productionTip = false
 Vue.use(ElementUI);
 Vue.prototype.$axios = axios
+let targetDomain = 'http://124.220.207.200:8080'
+Vue.prototype.$targetDomain = targetDomain
 
 // axios.defaults.baseURL='/api'
 
@@ -17,6 +19,7 @@ Vue.prototype.$axios = axios
 new Vue({
   el: '#app',
   axios,
+  targetDomain,
   router,
   components: { App },
   template: '<App/>'

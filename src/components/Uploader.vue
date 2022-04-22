@@ -5,7 +5,7 @@
     <el-progress :percentage="prog" style="margin: 5px auto 50px auto; width: 80%"
                  :text-inside="true" :stroke-width="26" :status="prog_stat"></el-progress>
     </div>
-    <el-row :gutter="40">
+    <el-row :gutter="40"">
       <el-col :span="2">
         <el-upload
           class="upload-demo"
@@ -80,7 +80,7 @@
           <el-button size="small" type="success" @click="export2excel" style="margin: 20px auto 20px auto"
                      v-if="tableData.length !== 0">导出至Excel</el-button>
           <el-table
-            :data="tableData" :stripe="true" :max-height="800" size="small"
+            :data="tableData" :stripe="true" :max-height="800" size="small""
             style="width: 100%; margin-top: 10px">
             <el-table-column
               prop="date"
@@ -116,7 +116,7 @@ export default {
       prog: 0,
       in_prog: false,
       prog_stat: null,
-      prog_text: "正在上传识别，请耐心等待...",
+      prog_text: "正在上传文件，速度取决于网络状况，请耐心等待...",
       tableData: [],
       misData: [],
       timer: null,
@@ -146,7 +146,7 @@ export default {
         fileList.pop()
       }
       if (!isLt1M) {
-        this.$message.error('上传图片大小不能超过 1MB!');
+        this.$message.error('上传文件大小不能超过 1MB!');
         fileList.pop()
       }
       if (fileList.length > 200) {
@@ -158,7 +158,7 @@ export default {
     submitUpload() {
       this.getToken().then(response => {
         // console.log(response)
-        window.localStorage.setItem('token', response.data)
+        window.sessionStorage.setItem('token', response.data)
         this.server_available = true
         this.in_prog = true
         this.getProgress()
@@ -220,18 +220,26 @@ export default {
       // for(var pair of params.entries()) {
       //   console.log(pair[0]+ ', '+ pair[1]);
       // }
-      return this.$axios.post(`http://127.0.0.1:5000/api/recognition`, params,
-        { headers: { 'Content-Type': 'multipart/form-data', token: window.localStorage.getItem('token')}})
+      return this.$axios.post(this.$targetDomain + `/api/recognition`, params,
+        { headers: { 'Content-Type': 'multipart/form-data', token: window.sessionStorage.getItem('token')}})
     },
     getProgress() {
       this.timer = setInterval(() => {  //创建定时器
         this.getStatus().then(response => {
           // console.log(response);
-          if(response.data === -1) {
+          // token valid but upload not done
+          console.log(response.data)
+          if(response.data === -2) {
+            this.prog_text = "正在上传文件，速度取决于网络状况，请耐心等待..."
+            this.prog = 0
+          }
+          else if(response.data === -1) {
             this.$message.warning('进度获取出现问题...暂不显示实时进度');
             this.clearTimer()
+            this.prog_text = "仍正在识别，请耐心等待数分钟...如仍无结果请刷新页面重试"
           }
           else {
+            this.prog_text = "已上传完成，正在识别，请耐心等待..."
             this.prog = Math.round(response.data * 100)
             if(this.prog === 100) {
               this.clearTimer()
@@ -245,8 +253,8 @@ export default {
       }, 2000);
     },
     getStatus() {
-      return this.$axios.get('http://127.0.0.1:5000/api/getprog', {params: {
-          token: window.localStorage.getItem('token'), timeout: 2000
+      return this.$axios.get(this.$targetDomain + '/api/getprog', {params: {
+          token: window.sessionStorage.getItem('token'), timeout: 3000
         }})
     },
     clearTimer() {//清除定时器
@@ -264,7 +272,7 @@ export default {
           + d.getDate() + "-"
           + d.getHours() + '-'
           + d.getMinutes() + "-"
-          + d.getSeconds() + ".xlsx" // a标签添加属性
+          + d.getSeconds() + ".xls" // a标签添加属性
         link.style.display = 'none'
         link.href = URL.createObjectURL(blob)
         document.body.appendChild(link)
@@ -274,17 +282,17 @@ export default {
       })
     },
     getExcel() {
-      return this.$axios.get('http://127.0.0.1:5000/api/getexcel', {params: {
-          token: window.localStorage.getItem('token')}, responseType: 'arraybuffer'})
+      return this.$axios.get(this.$targetDomain + '/api/getexcel', {params: {
+          token: window.sessionStorage.getItem('token')}, responseType: 'arraybuffer'})
     },
     getToken() {
-      return this.$axios.get('http://127.0.0.1:5000/api/gettoken', {params: {
+      return this.$axios.get(this.$targetDomain + '/api/gettoken', {params: {
         }})
     },
     destroyToken() {
-      let t = window.localStorage.getItem('token')
+      let t = window.sessionStorage.getItem('token')
       if(t != null) {
-        return this.$axios.delete('http://127.0.0.1:5000/api/destroytoken',{params: {
+        return this.$axios.delete(this.$targetDomain + '/api/destroytoken',{params: {
             token: t}
       })}
     }
@@ -295,7 +303,7 @@ export default {
     this.timer = null;
   },
   beforeMount() {
-    window.localStorage.removeItem('token')
+    window.sessionStorage.removeItem('token')
     this.server_available = false
   },
   mounted() {
