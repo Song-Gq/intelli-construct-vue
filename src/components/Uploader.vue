@@ -5,7 +5,7 @@
     <el-progress :percentage="prog" style="margin: 5px auto 50px auto; width: 80%"
                  :text-inside="true" :stroke-width="26" :status="prog_stat"></el-progress>
     </div>
-    <el-row :gutter="40"">
+    <el-row :gutter="40">
       <el-col :span="2">
         <el-upload
           class="upload-demo"
@@ -36,6 +36,8 @@
                      style="pointer-events: auto; font-size: 14px">选取文件夹</el-button>
           <div slot="tip" class="el-upload__tip" style="margin-top: 15px; font-size: 14px">
             批量上传核酸检测截图JPEG文件，每张建议不超过200KB</div>
+          <div slot="tip" class="el-upload__tip" style="margin-top: 5px; font-size: 14px">
+            文件总大小不能超过20MB</div>
           <div slot="tip" class="el-upload__tip" style="margin-top: 5px; font-size: 14px">
             选取文件数：{{chosenfilenum}}</div>
         </el-upload>
@@ -80,7 +82,7 @@
           <el-button size="small" type="success" @click="export2excel" style="margin: 20px auto 20px auto"
                      v-if="tableData.length !== 0">导出至Excel</el-button>
           <el-table
-            :data="tableData" :stripe="true" :max-height="800" size="small""
+            :data="tableData" :stripe="true" :max-height="800" size="small"
             style="width: 100%; margin-top: 10px">
             <el-table-column
               prop="date"
@@ -122,6 +124,7 @@ export default {
       timer: null,
       f_exist: false,
       server_available: false,
+      recog_started: false
     };
   },
   computed: {
@@ -177,7 +180,8 @@ export default {
         // formData.append('fileName', this.fileList.name);
         // 自定义上传
         this.uploadFile(formData).then(response => {
-          // console.log(response);
+          console.log(response);
+          console.log(response.status);
           this.prog = 100
           this.prog_stat = "success"
           this.prog_text = "识别成功，刷新页面可重新上传"
@@ -204,7 +208,8 @@ export default {
         })
           .catch(error => {
             console.log(error)
-            this.$message.error('上传识别失败！');
+            // this.$message.error('文件总大小不能超过20MB，请分批上传识别！');
+            this.$message.error('上传识别失败！若文件总大小超过20MB，请尝试分批上传');
             this.prog_stat = "exception"
             this.prog_text = "请刷新页面重试"
             this.clearTimer()
@@ -221,17 +226,20 @@ export default {
       //   console.log(pair[0]+ ', '+ pair[1]);
       // }
       return this.$axios.post(this.$targetDomain + `/api/recognition`, params,
-        { headers: { 'Content-Type': 'multipart/form-data', token: window.sessionStorage.getItem('token')}})
+        { headers: { 'Content-Type': 'multipart/form-data',
+            token: window.sessionStorage.getItem('token')}
+        })
     },
     getProgress() {
       this.timer = setInterval(() => {  //创建定时器
         this.getStatus().then(response => {
           // console.log(response);
           // token valid but upload not done
-          console.log(response.data)
           if(response.data === -2) {
-            this.prog_text = "正在上传文件，速度取决于网络状况，请耐心等待..."
-            this.prog = 0
+            if(!this.recog_started) {
+              this.prog_text = "正在上传文件，速度取决于网络状况，请耐心等待..."
+              this.prog = 0
+            }
           }
           else if(response.data === -1) {
             this.$message.warning('进度获取出现问题...暂不显示实时进度');
@@ -239,6 +247,7 @@ export default {
             this.prog_text = "仍正在识别，请耐心等待数分钟...如仍无结果请刷新页面重试"
           }
           else {
+            this.recog_started = true
             this.prog_text = "已上传完成，正在识别，请耐心等待..."
             this.prog = Math.round(response.data * 100)
             if(this.prog === 100) {
@@ -254,7 +263,7 @@ export default {
     },
     getStatus() {
       return this.$axios.get(this.$targetDomain + '/api/getprog', {params: {
-          token: window.sessionStorage.getItem('token'), timeout: 3000
+          token: window.sessionStorage.getItem('token'), timeout: 2000
         }})
     },
     clearTimer() {//清除定时器

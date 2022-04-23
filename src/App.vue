@@ -18,7 +18,10 @@
       <el-main>
         <router-view/>
       </el-main>
-      <el-footer style="font-size: 12px; color: grey; height: 40px">
+      <el-footer style="font-size: 12px; color: grey; height: 60px">
+        <div style="margin-top: 5px; color: black;">
+          已累计识别图片{{sumPicNum}}张
+        </div>
         <div style="margin-top: 5px; color: royalblue">
           Source Code Repository on
           <el-link href="https://github.com/Song-Gq/shanghai-nucleic-acid-ocr"
@@ -40,14 +43,23 @@ export default {
   data() {
     return {
       activeIndex: '1',
+      sumPicNum: 0
     };
   },
   methods: {
     handleSelect(key, keyPath) {
       // this.$router.go(0)
+    },
+    getSumPic() {
+      return this.$axios.get(this.$targetDomain + '/api/getsum').then(response => {
+        this.sumPicNum = response.data
+      })
     }
   },
-  mode: 'history'
+  mode: 'history',
+  created() {
+    this.getSumPic()
+  }
 }
 </script>
 
