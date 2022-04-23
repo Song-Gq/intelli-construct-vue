@@ -1,12 +1,27 @@
-# shanghai-nucleic-acid-ocr-vue
+## shanghai-nucleic-acid-ocr-vue
 
 a simple vue.js front end for shanghai nucleic acid test screenshot OCR
 
-See back end and ocr script for reference: 
+See back end and ocr script for reference https://github.com/Song-Gq/shanghai-nucleic-acid-ocr
 
-https://github.com/Song-Gq/shanghai-nucleic-acid-ocr
+#### Changes Needed
 
-## Build Setup
+In `/src/main.js`
+
+```js
+let targetDomain = 'https://your.own.domain:443'
+```
+
+#### Dependency
+
+In `package.json`, run the following scripts
+
+```
+"install-element": "npm i element-ui -S",
+"install-axios": "npm i axios -S"
+```
+
+#### Build Setup
 
 ``` bash
 # install dependencies
