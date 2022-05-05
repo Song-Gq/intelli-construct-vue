@@ -56,7 +56,6 @@ export default {
       })
     }
   },
-  mode: 'history',
   created() {
     this.getSumPic()
   }

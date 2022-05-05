@@ -11,6 +11,7 @@ export default new Router({
       name: 'Uploader',
       component: Uploader
     }
-  ]
+  ],
+  mode: 'history'
 })
 
