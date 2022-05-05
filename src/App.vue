@@ -30,7 +30,7 @@
           </el-link>
         </div>
         <div style="margin-top: 5px;">
-          Copyright © 2022 Trusted AI Lab, Tongji University, Shanghai. All Rights Reserved
+          Copyright © 2022 Trusted AI Lab, Shanghai. All Rights Reserved
         </div>
       </el-footer>
     </el-container>
