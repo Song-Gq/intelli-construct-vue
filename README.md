@@ -1,8 +1,8 @@
-## shanghai-nucleic-acid-ocr-vue
+## Intelligent Construction Site - Vue.js
 
-a simple vue.js front end for shanghai nucleic acid test screenshot OCR
+a simple vue.js front end for 'Intelligent Construction Site' project
 
-See back end and ocr script for reference https://github.com/Song-Gq/shanghai-nucleic-acid-ocr
+See back end and ocr script for reference https://github.com/Song-Gq/intelli-construct-flask
 
 #### Changes Needed
 
