@@ -34,8 +34,8 @@
           <!--      <el-button size="small" type="primary">点击上传</el-button>-->
           <el-button slot="trigger" size="small" type="primary" :disabled="in_prog"
                      style="pointer-events: auto; font-size: 14px">选取文件夹</el-button>
-          <div slot="tip" class="el-upload__tip" style="margin-top: 15px; font-size: 14px">
-            批量上传核酸检测截图JPEG文件，每张建议不超过200KB</div>
+<!--          <div slot="tip" class="el-upload__tip" style="margin-top: 15px; font-size: 14px">-->
+<!--            批量上传核酸检测截图JPEG文件，每张建议不超过200KB</div>-->
           <div slot="tip" class="el-upload__tip" style="margin-top: 5px; font-size: 14px">
             文件总大小不能超过20MB</div>
           <div slot="tip" class="el-upload__tip" style="margin-top: 5px; font-size: 14px">
@@ -104,6 +104,7 @@
         </template>
       </el-col>
     </el-row>
+    <iframe style="margin-top: 40px" width="1120" height="630" src="//player.bilibili.com/player.html?aid=764029001&bvid=BV1Ur4y1C73M&cid=438374904&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
   </div>
 </template>
 

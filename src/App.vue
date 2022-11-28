@@ -5,7 +5,12 @@
         <el-row type="flex" class="row-bg" justify="space-between" style="height: 100%">
           <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect"
                    style="height: 100%;">
-            <el-menu-item index="1" style="font-size: 18px">上海地区核酸检测截图文本识别系统</el-menu-item>
+            <el-menu-item index="1" style="font-size: 18px">基于人工智能的建造安全管理创新示范</el-menu-item>
+            <el-menu-item index="2" style="font-size: 18px">人员识别</el-menu-item>
+            <el-menu-item index="3" style="font-size: 18px">驾驶室动作</el-menu-item>
+            <el-menu-item index="4" style="font-size: 18px">大型设备</el-menu-item>
+            <el-menu-item index="5" style="font-size: 18px">设备操作</el-menu-item>
+            <el-menu-item index="5" style="font-size: 18px">声纹识别</el-menu-item>
           </el-menu>
           <el-col :span="4">
             <el-image :src="require('@/assets/tongji.png')" fit="scale-down"
@@ -20,7 +25,7 @@
       </el-main>
       <el-footer style="font-size: 12px; color: grey; height: 60px">
         <div style="margin-top: 5px; color: black;">
-          已累计识别图片{{sumPicNum}}张
+          已累计识别{{sumPicNum}}
         </div>
         <div style="margin-top: 5px; color: royalblue">
           Source Code Repository on
