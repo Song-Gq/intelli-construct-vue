@@ -9,12 +9,14 @@
     "start": "npm run dev",
     "build": "node build/build.js",
     "install-element": "npm i element-ui -S",
-    "install-axios": "npm i axios -S"
+    "install-axios": "npm i axios -S",
+    "install-plotly": "npm install vue-plotly"
   },
   "dependencies": {
     "axios": "^0.26.1",
     "element-ui": "^2.15.12",
     "vue": "^2.5.2",
+    "vue-plotly": "^1.1.0",
     "vue-router": "^3.0.1"
   },
   "devDependencies": {

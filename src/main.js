@@ -10,7 +10,8 @@ import axios from 'axios'
 Vue.config.productionTip = false
 Vue.use(ElementUI);
 Vue.prototype.$axios = axios
-let targetDomain = 'https://ocr.gqsong.xyz:443'
+let targetDomain = 'https://x.gqsong.xyz:443'
+// let targetDomain = 'http://localhost:5001'
 Vue.prototype.$targetDomain = targetDomain
 
 // axios.defaults.baseURL='/api'
