@@ -1,12 +1,12 @@
 <template>
-  <Plotly :data="figData" :layout="layout" :display-mode-bar="false">}</Plotly>
+  <Plotly :data="figData" :layout="figLayout" :display-mode-bar="false">}</Plotly>
 </template>
 
 <script>
 import {Plotly} from "vue-plotly"
 
 export default {
-  props: ["figData"],
+  props: ["figData", "figLayout"],
   components: {
     Plotly
   },
@@ -18,9 +18,9 @@ export default {
       //   y: [10,15,13,17],
       //   type:"scatter"
       // }],
-      layout:{
-        title: "excavator"
-      }
+      // layout:{
+      //   title: ""
+      // }
     }
   }
 }

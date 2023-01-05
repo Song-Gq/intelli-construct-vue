@@ -2,7 +2,8 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Uploader from '@/components/Uploader'
 import Navi from '@/components/Navi'
-import excavatorState from '@/components/excavatorState'
+import ExcavatorState from '@/components/ExcavatorState'
+import WaveRecognition from '@/components/WaveRecognition';
 
 // const originalPush = Router.prototype.push
 // Router.prototype.push = function push(location) {
@@ -24,8 +25,13 @@ export default new Router({
     },
     {
       path: '/excavatorState',
-      name: 'excavatorState',
-      component: excavatorState
+      name: 'ExcavatorState',
+      component: ExcavatorState
+    },
+    {
+      path: '/waveRecognition',
+      name: 'WaveRecognition',
+      component: WaveRecognition
     },
   ],
   mode: 'history'

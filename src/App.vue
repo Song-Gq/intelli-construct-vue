@@ -10,7 +10,7 @@
           <el-menu-item index="2" style="font-size: 18px">驾驶室动作</el-menu-item>
           <el-menu-item index="excavatorState" style="font-size: 18px">大型设备</el-menu-item>
           <el-menu-item index="4" style="font-size: 18px">设备操作</el-menu-item>
-          <el-menu-item index="5" style="font-size: 18px">声纹识别</el-menu-item>
+          <el-menu-item index="waveRecognition" style="font-size: 18px">声纹识别</el-menu-item>
           <div>
             <el-image :src="require('@/assets/tongji-w.png')" fit="scale-down"
                       style="height: 80%; margin: 5px auto auto auto; position: absolute; right: 5%"></el-image>
@@ -35,7 +35,7 @@
           </el-link>
         </div>
         <div style="margin-top: 5px;">
-          Copyright © 2022 Trusted AI Lab, Shanghai. All Rights Reserved
+          Copyright © 2023 Trusted AI Lab, Shanghai. All Rights Reserved
         </div>
       </el-footer>
     </el-container>
