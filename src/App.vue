@@ -6,10 +6,10 @@
                  :router="true" style="height: 100%"
                  background-color="#545c64" text-color="#fff" active-text-color="#ffd04b">
           <el-menu-item index="index" style="font-size: 18px">基于人工智能的建造安全管理创新示范</el-menu-item>
-          <el-menu-item index="1" style="font-size: 18px">人员识别</el-menu-item>
-          <el-menu-item index="2" style="font-size: 18px">驾驶室动作</el-menu-item>
+          <el-menu-item index="equip" style="font-size: 18px">人员识别</el-menu-item>
+          <el-menu-item index="driverFace" style="font-size: 18px">驾驶室动作</el-menu-item>
           <el-menu-item index="excavatorState" style="font-size: 18px">大型设备</el-menu-item>
-          <el-menu-item index="4" style="font-size: 18px">设备操作</el-menu-item>
+          <el-menu-item index="driverAction" style="font-size: 18px">设备操作</el-menu-item>
           <el-menu-item index="waveRecognition" style="font-size: 18px">声纹识别</el-menu-item>
           <div>
             <el-image :src="require('@/assets/tongji-w.png')" fit="scale-down"

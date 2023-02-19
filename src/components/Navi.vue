@@ -21,35 +21,35 @@
 <!--            选取文件</el-button>-->
         </el-upload>
       </el-col>
-      <el-col :span="8" style="pointer-events: none">
-        <el-upload
-          class="upload"
-          ref="upload"
-          action="#"
-          :multiple="true"
-          :auto-upload="false"
-          :on-change="handleChange"
-          :file-list="fileList"
-          :disabled="in_prog">
-          <!--      <el-button size="small" type="primary">点击上传</el-button>-->
-<!--          <el-button slot="trigger" size="small" type="primary" :disabled="in_prog"-->
-<!--                     style="pointer-events: auto; font-size: 14px">选取文件夹</el-button>-->
-          <!--          <div slot="tip" class="el-upload__tip" style="margin-top: 15px; font-size: 14px">-->
-          <!--            批量上传核酸检测截图JPEG文件，每张建议不超过200KB</div>-->
-          <div slot="tip" class="el-upload__tip" style="margin-top: 5px; font-size: 14px">
-            文件总大小不能超过20MB</div>
-          <div slot="tip" class="el-upload__tip" style="margin-top: 5px; font-size: 14px">
-            选取文件数：{{chosenfilenum}}</div>
-        </el-upload>
-      </el-col>
-      <el-col :span="2">
-        <el-button style="float: right; margin-right: 150%; font-size: 14px" size="small" type="success"
-                   v-if="fileList.length === 0" :disabled="true">开始识别</el-button>
-        <el-button style="float: right; margin-right: 150%; font-size: 14px" size="small" type="success"
-                   @click="submitUpload" v-if="fileList.length !== 0" :disabled="in_prog">开始识别</el-button>
-        <!--          <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload"
-                             v-if="fileList.length !== 0">re-recog (only for test)</el-button>-->
-      </el-col>
+<!--      <el-col :span="8" style="pointer-events: none">-->
+<!--        <el-upload-->
+<!--          class="upload"-->
+<!--          ref="upload"-->
+<!--          action="#"-->
+<!--          :multiple="true"-->
+<!--          :auto-upload="false"-->
+<!--          :on-change="handleChange"-->
+<!--          :file-list="fileList"-->
+<!--          :disabled="in_prog">-->
+<!--          &lt;!&ndash;      <el-button size="small" type="primary">点击上传</el-button>&ndash;&gt;-->
+<!--&lt;!&ndash;          <el-button slot="trigger" size="small" type="primary" :disabled="in_prog"&ndash;&gt;-->
+<!--&lt;!&ndash;                     style="pointer-events: auto; font-size: 14px">选取文件夹</el-button>&ndash;&gt;-->
+<!--          &lt;!&ndash;          <div slot="tip" class="el-upload__tip" style="margin-top: 15px; font-size: 14px">&ndash;&gt;-->
+<!--          &lt;!&ndash;            批量上传核酸检测截图JPEG文件，每张建议不超过200KB</div>&ndash;&gt;-->
+<!--          <div slot="tip" class="el-upload__tip" style="margin-top: 5px; font-size: 14px">-->
+<!--            文件总大小不能超过20MB</div>-->
+<!--          <div slot="tip" class="el-upload__tip" style="margin-top: 5px; font-size: 14px">-->
+<!--            选取文件数：{{chosenfilenum}}</div>-->
+<!--        </el-upload>-->
+<!--      </el-col>-->
+<!--      <el-col :span="2">-->
+<!--        <el-button style="float: right; margin-right: 150%; font-size: 14px" size="small" type="success"-->
+<!--                   v-if="fileList.length === 0" :disabled="true">开始识别</el-button>-->
+<!--        <el-button style="float: right; margin-right: 150%; font-size: 14px" size="small" type="success"-->
+<!--                   @click="submitUpload" v-if="fileList.length !== 0" :disabled="in_prog">开始识别</el-button>-->
+<!--        &lt;!&ndash;          <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload"-->
+<!--                             v-if="fileList.length !== 0">re-recog (only for test)</el-button>&ndash;&gt;-->
+<!--      </el-col>-->
       <el-col :span="12">
         <template>
           <el-result icon="warning" title="提请注意" subTitle="以下结果请人工复核" v-if="misData.length !== 0"
@@ -76,31 +76,31 @@
               label="结果">
             </el-table-column>
           </el-table>
-          <div style="font-size: 14px">
-            识别文件数：{{resultfilenum}}
-          </div>
+<!--          <div style="font-size: 14px">-->
+<!--            识别文件数：{{resultfilenum}}-->
+<!--          </div>-->
           <el-button size="small" type="success" @click="export2excel" style="margin: 20px auto 20px auto"
                      v-if="tableData.length !== 0">导出至Excel</el-button>
-          <el-table
-            :data="tableData" :stripe="true" :max-height="800" size="small"
-            style="width: 100%; margin-top: 10px">
-            <el-table-column
-              prop="date"
-              label="日期">
-            </el-table-column>
-            <el-table-column
-              prop="name"
-              label="姓名">
-            </el-table-column>
-            <el-table-column
-              prop="type"
-              label="类型">
-            </el-table-column>
-            <el-table-column
-              prop="result"
-              label="结果">
-            </el-table-column>
-          </el-table>
+<!--          <el-table-->
+<!--            :data="tableData" :stripe="true" :max-height="800" size="small"-->
+<!--            style="width: 100%; margin-top: 10px">-->
+<!--            <el-table-column-->
+<!--              prop="date"-->
+<!--              label="日期">-->
+<!--            </el-table-column>-->
+<!--            <el-table-column-->
+<!--              prop="name"-->
+<!--              label="姓名">-->
+<!--            </el-table-column>-->
+<!--            <el-table-column-->
+<!--              prop="type"-->
+<!--              label="类型">-->
+<!--            </el-table-column>-->
+<!--            <el-table-column-->
+<!--              prop="result"-->
+<!--              label="结果">-->
+<!--            </el-table-column>-->
+<!--          </el-table>-->
         </template>
       </el-col>
     </el-row>

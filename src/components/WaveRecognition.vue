@@ -193,8 +193,8 @@ export default {
         this.$message.error('上传文件大小不能超过 10MB!');
         fileList.pop()
       }
-      if (fileList.length > 200) {
-        this.$message.error('单次识别数量不能超过 200!');
+      if (fileList.length > 1) {
+        this.$message.error('单次识别数量不能超过 1!');
         fileList.pop()
       }
       this.fileList = fileList;
@@ -296,7 +296,7 @@ export default {
             }
           }
           else if(response.data === -1) {
-            this.$message.warning('进度获取出现问题...暂不显示实时进度');
+            // this.$message.warning('进度获取出现问题...暂不显示实时进度');
             this.clearTimer()
             this.prog_text = "仍正在识别，请耐心等待数分钟...如仍无结果请刷新页面重试"
           }

@@ -1,6 +1,18 @@
 <template>
   <div style="margin-top: 30px">
     <el-row :gutter="40">
+      <el-col :span="2" style="margin: auto auto 40px 50px">
+        设备位置
+        <el-switch
+          v-model="equip_pos"
+          class="switch"
+          inline-prompt
+          active-text="右" inactive-text="左"
+          inactive-color="#13ce66"
+        />
+      </el-col>
+    </el-row>
+    <el-row :gutter="40">
       <el-col :span="1">
         <el-upload
           class="upload-demo"
@@ -13,7 +25,7 @@
           :show-file-list="false"
           style="float: left; margin-left: 150%">
           <el-button slot="trigger" size="small" type="primary" :disabled="in_prog" style="font-size: 14px">
-            选取视频文件</el-button>
+            选取图片</el-button>
         </el-upload>
       </el-col>
       <el-col :span="3" style="pointer-events: none">
@@ -26,10 +38,6 @@
           :on-change="handleChange"
           :file-list="fileList"
           :disabled="in_prog">
-          <!--          <el-button slot="trigger" size="small" type="primary" :disabled="in_prog"-->
-          <!--                     style="pointer-events: auto; font-size: 14px">选取文件夹</el-button>-->
-          <!--                    <div slot="tip" class="el-upload__tip" style="margin-top: 15px; font-size: 14px">-->
-          <!--                      批量上传核酸检测截图JPEG文件，每张建议不超过200KB</div>-->
           <div slot="tip" class="el-upload__tip" style="margin-top: 30px; font-size: 14px">
             文件大小不能超过10MB</div>
           <div slot="tip" class="el-upload__tip" style="margin-top: 5px; font-size: 14px">
@@ -41,8 +49,6 @@
                    v-if="fileList.length === 0" :disabled="true">开始识别</el-button>
         <el-button style="float: right; margin-right: 150%; font-size: 14px" size="small" type="success"
                    @click="submitUpload" v-if="fileList.length !== 0" :disabled="in_prog">开始识别</el-button>
-        <!--          <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload"
-                             v-if="fileList.length !== 0">re-recog (only for test)</el-button>-->
       </el-col>
       <el-col :span="19">
         <div v-show="in_prog">
@@ -52,96 +58,40 @@
         </div>
       </el-col>
     </el-row>
-<!--    <el-row :gutter="40">-->
-<!--    </el-row>-->
     <el-row :gutter="40">
-      <el-col :span="12">
-        <Loc2d :figData="posFig" style="height: 800px"/>
-        <Loc2d :figData="areaFig" style="height: 800px"/>
+      <el-col :span="12" style="margin: 50px 50px">
+        <span class="demonstration" style="display: block;" v-show="this.prog !== 100">待识别...</span>
+        <el-image style="width:1000px; height: 600px; margin-top: 10px" :src="res_img" fit="scale-down">
+          <template #placeholder>
+            <div class="image-slot">Loading<span class="dot">...</span></div>
+          </template>
+        </el-image>
       </el-col>
-      <el-col :span="12">
-        <template>
-          <el-result icon="warning" title="提请注意" subTitle="以下结果请人工复核" v-if="misData.length !== 0"
-                     style="padding-top: 20px">
-          </el-result>
-          <el-table
-            :data="misData" v-if="misData.length !== 0"
-            :row-style="rowStatus"
-            style="width: 100%; margin-bottom: 50px;">
-            <el-table-column
-              prop="date"
-              label="日期">
-            </el-table-column>
-            <el-table-column
-              prop="name"
-              label="姓名">
-            </el-table-column>
-            <el-table-column
-              prop="type"
-              label="类型">
-            </el-table-column>
-            <el-table-column
-              prop="result"
-              label="结果">
-            </el-table-column>
-          </el-table>
-          <div style="font-size: 14px">
-            有目标帧数：{{resultfilenum}}
-          </div>
-<!--          <el-button size="small" type="success" @click="export2excel" style="margin: 20px auto 20px auto"-->
-<!--                     v-if="tableData.length !== 0">导出至Excel</el-button>-->
-          <el-table
-            :data="tableData" :stripe="true" :max-height="1500" size="small"
-            style="width: 100%; margin-top: 10px">
-            <el-table-column
-              prop="frame"
-              label="帧">
-            </el-table-column>
-            <el-table-column
-              prop="excav"
-              label="挖机">
-            </el-table-column>
-            <el-table-column
-              prop="top"
-              label="顶">
-            </el-table-column>
-            <el-table-column
-              prop="left"
-              label="左">
-            </el-table-column>
-            <el-table-column
-              prop="width"
-              label="宽">
-            </el-table-column>
-            <el-table-column
-              prop="height"
-              label="高">
-            </el-table-column>
-            <el-table-column
-              prop="area"
-              label="面积">
-            </el-table-column>
-          </el-table>
-        </template>
+      <el-col :span="3">
+        <el-result
+          :icon="recog_res_icon"
+          :title="recog_res_text"
+          :sub-title="recog_res_sub_text"
+          v-if="this.prog_stat === 'success'"
+          style="margin: 30px auto auto auto;"
+        >
+        </el-result>
       </el-col>
     </el-row>
-<!--    <el-row :gutter="40">-->
-<!--      <el-col :span="12">-->
-<!--      </el-col>-->
-<!--    </el-row>-->
-<!--    <iframe style="margin-top: 40px" width="1120" height="630" src="//player.bilibili.com/player.html?aid=764029001&bvid=BV1Ur4y1C73M&cid=438374904&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>-->
+    <el-row :gutter="40">
+
+    </el-row>
   </div>
 </template>
 
 <script>
-import axios from "axios";
 import Loc2d from "./plotly/Loc2d.vue"
 
 export default {
   components: {
     Loc2d
   },
-  name: "ExcavatorState",
+  name: "DriverFace",
   data() {
     return {
       fileList: [],
@@ -155,9 +105,16 @@ export default {
       f_exist: false,
       server_available: false,
       recog_started: false,
-      areaFig: [{x:[], y:[], type:"scatter"}],
-      posFig: [{x:[], y:[], type:"scatter"}, {x:[], y:[], type:"scatter"}]
+      originalFig: [{x:[], y:[], type:"scatter"}],
+      processedFig: [{x:[], y:[], type:"scatter"}],
+      originalFigLayout: {title: '原始波形'},
+      processedFigLayout: {title: '单边振幅谱(归一化)'},
       // posFig: [{x:[], y:[], type:"scatter"}]
+      recog_res_icon: "error",
+      recog_res_text: "Unknown",
+      recog_res_sub_text: "Recognition Error",
+      equip_pos: false,
+      res_img: null
     };
   },
   computed: {
@@ -175,10 +132,10 @@ export default {
     handleChange(file, fileList) {
       let pos = file.name.lastIndexOf('.')
       let suffix = file.name.substring(pos, file.name.length).toLowerCase()
-      const isMP4 = (suffix === '.mp4');
+      const isJPG = (suffix === '.jpg');
       const isLt10M = file.size / 1024 / 1024 < 10;
-      if (!isMP4) {
-        this.$message.error('上传视频只能是 MP4 格式!');
+      if (!isJPG) {
+        this.$message.error('上传图片只能是 JPG 格式!');
         fileList.pop()
       }
       if (!isLt10M) {
@@ -207,6 +164,7 @@ export default {
           // this.fileList.name.push(file.name);
           id += 1
         });
+        formData.append('equip_pos', this.equip_pos)
         // console.log("提交前",formData.getAll('file'));
 
         // 文件名
@@ -221,27 +179,29 @@ export default {
           this.clearTimer()
           let res_d = response.data
           let res = res_d.res
-          for (let i in res) {
-            // console.log(res[i][3])
-            this.tableData.push({'frame': res[i][0], 'excav': res[i][1], 'top': res[i][2], 'left': res[i][3],
-              'width': res[i][4], 'height': res[i][5], 'area': res[i][6]})
-            let centerX = res[i][3] +  res[i][4] / 2
-            let centerY = res[i][2] +  res[i][5] / 2
-            this.areaFig[0]['x'].push(res[i][0])
-            this.areaFig[0]['y'].push(res[i][6])
-            this.posFig[0]['x'].push(res[i][0])
-            this.posFig[0]['y'].push(centerX)
-            this.posFig[1]['x'].push(res[i][0])
-            this.posFig[1]['y'].push(centerY)
+          this.recog_res_icon = 'info'
+          this.recog_res_sub_text = 'Recognition Done'
+          if (res === -1) {
+            this.recog_res_text = "未检测到人脸"
           }
-          console.log(this.posFig)
-          let mis = res_d.mis
-          if(mis !== null) {
-            for (let i in mis) {
-              // console.log(res[i][3])
-              this.misData.push({'date': mis[i][2], 'name': mis[i][1], 'type': mis[i][0], 'result': mis[i][3]})
+          else {
+            if (res === 0) {
+              this.recog_res_text = "操作合规"
             }
+            else {
+              this.recog_res_text = "操作不合规"
+            }
+            this.res_img = this.$targetDomain + `/api/driverFaceImg` + "?token=" +
+              window.sessionStorage.getItem('token') + "&timeout=2000"
           }
+          // console.log(this.posFig)
+          // let mis = res_d.mis
+          // if(mis !== null) {
+          //   for (let i in mis) {
+          //     // console.log(res[i][3])
+          //     this.misData.push({'date': mis[i][2], 'name': mis[i][1], 'type': mis[i][0], 'result': mis[i][3]})
+          //   }
+          // }
           // if(response.code == 200){
           //   this.$refs.upload.clearFiles();
           //   this.msgSuccess('上传成功！');
@@ -268,7 +228,7 @@ export default {
       // for(var pair of params.entries()) {
       //   console.log(pair[0]+ ', '+ pair[1]);
       // }
-      return this.$axios.post(this.$targetDomain + `/api/excavator`, params,
+      return this.$axios.post(this.$targetDomain + `/api/driverFace`, params,
         { headers: { 'Content-Type': 'multipart/form-data',
             token: window.sessionStorage.getItem('token')}
         })
