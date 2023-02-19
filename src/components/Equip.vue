@@ -49,7 +49,7 @@
     <el-row :gutter="40">
       <el-col :span="12" style="margin: 50px 50px">
         <span class="demonstration" style="display: block;" v-show="this.prog !== 100">待识别...</span>
-        <el-image style="width:1000px; height: 600px; margin-top: 10px" :src="res_img" fit="scale-down">
+        <el-image style="width:1000px; height: 600px; margin-top: 10px" :src="res_img" fit="contain">
           <template #placeholder>
             <div class="image-slot">Loading<span class="dot">...</span></div>
           </template>

@@ -6,22 +6,23 @@
                    :text-inside="true" :stroke-width="26" :status="prog_stat"></el-progress>
     </div>
     <el-row :gutter="40">
-      <el-col :span="2">
-        <el-upload
-          class="upload-demo"
-          action="#"
-          :multiple="true"
-          :auto-upload="false"
-          :on-change="handleChange"
-          :file-list="fileList"
-          :disabled="in_prog"
-          :show-file-list="false"
-          style="float: left; margin-left: 150%">
+<!--      <DriverActionBatch></DriverActionBatch>-->
+<!--      <el-col :span="1">-->
+<!--        <el-upload-->
+<!--          class="upload-demo"-->
+<!--          action="#"-->
+<!--          :multiple="true"-->
+<!--          :auto-upload="false"-->
+<!--          :on-change="handleChange"-->
+<!--          :file-list="fileList"-->
+<!--          :disabled="in_prog"-->
+<!--          :show-file-list="false"-->
+<!--          style="float: left; margin-left: 150%">-->
 <!--          <el-button slot="trigger" size="small" type="primary" :disabled="in_prog" style="font-size: 14px">-->
-<!--            选取文件</el-button>-->
-        </el-upload>
-      </el-col>
-<!--      <el-col :span="8" style="pointer-events: none">-->
+<!--            批量选取JSON</el-button>-->
+<!--        </el-upload>-->
+<!--      </el-col>-->
+<!--      <el-col :span="3" style="pointer-events: none">-->
 <!--        <el-upload-->
 <!--          class="upload"-->
 <!--          ref="upload"-->
@@ -31,78 +32,25 @@
 <!--          :on-change="handleChange"-->
 <!--          :file-list="fileList"-->
 <!--          :disabled="in_prog">-->
-<!--          &lt;!&ndash;      <el-button size="small" type="primary">点击上传</el-button>&ndash;&gt;-->
-<!--&lt;!&ndash;          <el-button slot="trigger" size="small" type="primary" :disabled="in_prog"&ndash;&gt;-->
-<!--&lt;!&ndash;                     style="pointer-events: auto; font-size: 14px">选取文件夹</el-button>&ndash;&gt;-->
-<!--          &lt;!&ndash;          <div slot="tip" class="el-upload__tip" style="margin-top: 15px; font-size: 14px">&ndash;&gt;-->
-<!--          &lt;!&ndash;            批量上传核酸检测截图JPEG文件，每张建议不超过200KB</div>&ndash;&gt;-->
-<!--          <div slot="tip" class="el-upload__tip" style="margin-top: 5px; font-size: 14px">-->
-<!--            文件总大小不能超过20MB</div>-->
+<!--          <div slot="tip" class="el-upload__tip" style="margin-top: 30px; font-size: 14px">-->
+<!--            文件大小不能超过10MB</div>-->
 <!--          <div slot="tip" class="el-upload__tip" style="margin-top: 5px; font-size: 14px">-->
 <!--            选取文件数：{{chosenfilenum}}</div>-->
 <!--        </el-upload>-->
 <!--      </el-col>-->
-<!--      <el-col :span="2">-->
+<!--      <el-col :span="1">-->
 <!--        <el-button style="float: right; margin-right: 150%; font-size: 14px" size="small" type="success"-->
 <!--                   v-if="fileList.length === 0" :disabled="true">开始识别</el-button>-->
 <!--        <el-button style="float: right; margin-right: 150%; font-size: 14px" size="small" type="success"-->
 <!--                   @click="submitUpload" v-if="fileList.length !== 0" :disabled="in_prog">开始识别</el-button>-->
-<!--        &lt;!&ndash;          <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload"-->
-<!--                             v-if="fileList.length !== 0">re-recog (only for test)</el-button>&ndash;&gt;-->
 <!--      </el-col>-->
-      <el-col :span="12">
-        <template>
-          <el-result icon="warning" title="提请注意" subTitle="以下结果请人工复核" v-if="misData.length !== 0"
-                     style="padding-top: 20px">
-          </el-result>
-          <el-table
-            :data="misData" v-if="misData.length !== 0"
-            :row-style="rowStatus"
-            style="width: 100%; margin-bottom: 50px;">
-            <el-table-column
-              prop="date"
-              label="日期">
-            </el-table-column>
-            <el-table-column
-              prop="name"
-              label="姓名">
-            </el-table-column>
-            <el-table-column
-              prop="type"
-              label="类型">
-            </el-table-column>
-            <el-table-column
-              prop="result"
-              label="结果">
-            </el-table-column>
-          </el-table>
-<!--          <div style="font-size: 14px">-->
-<!--            识别文件数：{{resultfilenum}}-->
-<!--          </div>-->
-          <el-button size="small" type="success" @click="export2excel" style="margin: 20px auto 20px auto"
-                     v-if="tableData.length !== 0">导出至Excel</el-button>
-<!--          <el-table-->
-<!--            :data="tableData" :stripe="true" :max-height="800" size="small"-->
-<!--            style="width: 100%; margin-top: 10px">-->
-<!--            <el-table-column-->
-<!--              prop="date"-->
-<!--              label="日期">-->
-<!--            </el-table-column>-->
-<!--            <el-table-column-->
-<!--              prop="name"-->
-<!--              label="姓名">-->
-<!--            </el-table-column>-->
-<!--            <el-table-column-->
-<!--              prop="type"-->
-<!--              label="类型">-->
-<!--            </el-table-column>-->
-<!--            <el-table-column-->
-<!--              prop="result"-->
-<!--              label="结果">-->
-<!--            </el-table-column>-->
-<!--          </el-table>-->
-        </template>
-      </el-col>
+<!--      <el-col :span="19">-->
+<!--        <div v-show="in_prog">-->
+<!--          {{prog_text}}-->
+<!--          <el-progress :percentage="prog" style="margin: 5px auto 50px auto; width: 80%"-->
+<!--                       :text-inside="true" :stroke-width="26" :status="prog_stat"></el-progress>-->
+<!--        </div>-->
+<!--      </el-col>-->
     </el-row>
     <iframe style="margin-top: 40px" width="1120" height="630" src="//player.bilibili.com/player.html?aid=764029001&bvid=BV1Ur4y1C73M&cid=438374904&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
   </div>
@@ -110,9 +58,14 @@
 
 <script>
 import axios from "axios";
+import DriverActionBatch from "./batch/DriverActionBatch";
+import Loc2d from "./plotly/Loc2d";
 
 export default {
   name: "Navi",
+  components: {
+    DriverActionBatch
+  },
   data() {
     return {
       fileList: [],
@@ -143,14 +96,14 @@ export default {
     handleChange(file, fileList) {
       let pos = file.name.lastIndexOf('.')
       let suffix = file.name.substring(pos, file.name.length)
-      const isJPGorPNG = (suffix === '.jpeg') || (suffix === '.jpg') || (suffix === '.png');
-      const isLt1M = file.size / 1024 / 1024 < 1;
-      if (!isJPGorPNG) {
-        this.$message.error('上传图片只能是 JPG/PNG 格式!');
+      const isJSON = (suffix === '.json');
+      const isLt10M = file.size / 1024 / 1024 < 10;
+      if (!isJSON) {
+        this.$message.error('上传文件只能是 JSON 格式!');
         fileList.pop()
       }
-      if (!isLt1M) {
-        this.$message.error('上传文件大小不能超过 1MB!');
+      if (!isLt10M) {
+        this.$message.error('上传文件大小不能超过 10MB!');
         fileList.pop()
       }
       if (fileList.length > 200) {
