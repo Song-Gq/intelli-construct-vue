@@ -55,7 +55,7 @@
           </template>
         </el-image>
       </el-col>
-      <el-col :span="3">
+      <el-col :span="8">
         <el-result
           :icon="recog_res_icon"
           :title="recog_res_text"
@@ -64,6 +64,43 @@
           style="margin: 30px auto auto auto;"
         >
         </el-result>
+        <el-table
+          :data="tableData" :stripe="true" :max-height="1500" size="small"
+          style="width: 100%; margin-top: 10px">
+          <el-table-column
+            label=" ">
+            <el-table-column
+              prop="title"
+              label=" ">
+            </el-table-column>
+          </el-table-column>
+          <el-table-column
+            label="戴安全帽">
+            <el-table-column
+              prop="worker"
+              label="普通工人">
+            </el-table-column>
+            <el-table-column
+              prop="manager"
+              label="管理人员">
+            </el-table-column>
+            <el-table-column
+              prop="tech"
+              label="技术人员">
+            </el-table-column>
+            <el-table-column
+              prop="sup"
+              label="监理">
+            </el-table-column>
+          </el-table-column>
+          <el-table-column
+            label="未戴安全帽">
+            <el-table-column
+              prop="other"
+              label="未知">
+            </el-table-column>
+          </el-table-column>
+        </el-table>
       </el-col>
     </el-row>
     <el-row :gutter="40">
@@ -87,7 +124,8 @@ export default {
       in_prog: false,
       prog_stat: null,
       prog_text: "正在上传文件，速度取决于网络状况，请耐心等待...",
-      tableData: [],
+      tableData: [{'title': "合规", 'worker': 0, 'manager': 0, 'tech': 0, 'sup': 0, 'other': 0},
+        {'title': "不合规", 'worker': 0, 'manager': 0, 'tech': 0, 'sup': 0, 'other': 0}],
       misData: [],
       timer: null,
       f_exist: false,
@@ -164,15 +202,27 @@ export default {
           this.prog_stat = "success"
           this.prog_text = "识别成功，刷新页面可重新上传"
           this.clearTimer()
-          let res_d = response.data
-          let res = res_d.res
           this.recog_res_icon = 'info'
           this.recog_res_sub_text = 'Recognition Done'
-          if (res === -1) {
+          let res_d = response.data
+          let res = res_d.res
+          console.log(response)
+          console.log(res_d)
+          if (res === null) {
             this.recog_res_text = "未检测到人"
           }
           else {
             this.recog_res_text = "检测完成"
+            this.tableData[0].worker = res[0][0]
+            this.tableData[1].worker = res[0][1]
+            this.tableData[0].manager = res[1][0]
+            this.tableData[1].manager = res[1][1]
+            this.tableData[0].tech = res[2][0]
+            this.tableData[1].tech = res[2][1]
+            this.tableData[0].sup = res[3][0]
+            this.tableData[1].sup = res[3][1]
+            this.tableData[0].other = res[4][0]
+            this.tableData[1].other = res[4][1]
             this.res_img = this.$targetDomain + `/api/equipImg` + "?token=" +
               window.sessionStorage.getItem('token') + "&timeout=2000"
           }

@@ -259,7 +259,7 @@ export default {
           }
         })
           .catch(error => {
-            this.$message.warning('进度获取出现问题...暂不显示实时进度');
+            // this.$message.warning('进度获取出现问题...暂不显示实时进度');
             this.clearTimer()
           })
       }, 2000);

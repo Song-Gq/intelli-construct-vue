@@ -61,30 +61,14 @@
       </el-col>
       <el-col :span="12">
         <template>
-          <el-result icon="warning" title="提请注意" subTitle="以下结果请人工复核" v-if="misData.length !== 0"
-                     style="padding-top: 20px">
+          <el-result
+            :icon="recog_res_icon"
+            :title="recog_res_text"
+            :sub-title="recog_res_sub_text"
+            v-if="this.prog_stat === 'success'"
+            style="margin: 30px auto auto auto;"
+          >
           </el-result>
-          <el-table
-            :data="misData" v-if="misData.length !== 0"
-            :row-style="rowStatus"
-            style="width: 100%; margin-bottom: 50px;">
-            <el-table-column
-              prop="date"
-              label="日期">
-            </el-table-column>
-            <el-table-column
-              prop="name"
-              label="姓名">
-            </el-table-column>
-            <el-table-column
-              prop="type"
-              label="类型">
-            </el-table-column>
-            <el-table-column
-              prop="result"
-              label="结果">
-            </el-table-column>
-          </el-table>
           <div style="font-size: 14px">
             有目标帧数：{{resultfilenum}}
           </div>
@@ -156,8 +140,11 @@ export default {
       server_available: false,
       recog_started: false,
       areaFig: [{x:[], y:[], type:"scatter"}],
-      posFig: [{x:[], y:[], type:"scatter"}, {x:[], y:[], type:"scatter"}]
+      posFig: [{x:[], y:[], type:"scatter"}, {x:[], y:[], type:"scatter"}],
       // posFig: [{x:[], y:[], type:"scatter"}]
+      recog_res_icon: "error",
+      recog_res_text: "Unknown",
+      recog_res_sub_text: "Recognition Error",
     };
   },
   computed: {
@@ -220,6 +207,15 @@ export default {
           this.prog_text = "识别成功，刷新页面可重新上传"
           this.clearTimer()
           let res_d = response.data
+          let state = res_d.state
+          this.recog_res_icon = 'info'
+          this.recog_res_sub_text = 'Recognition Done'
+          if (state === 1) {
+            this.recog_res_text = "设备正在工作"
+          }
+          else {
+            this.recog_res_text = "设备未在工作"
+          }
           let res = res_d.res
           for (let i in res) {
             // console.log(res[i][3])
@@ -299,7 +295,7 @@ export default {
           }
         })
           .catch(error => {
-            this.$message.warning('进度获取出现问题...暂不显示实时进度');
+            // this.$message.warning('进度获取出现问题...暂不显示实时进度');
             this.clearTimer()
           })
       }, 2000);
