@@ -10,14 +10,19 @@
     "build": "node build/build.js",
     "install-element": "npm i element-ui -S",
     "install-axios": "npm i axios -S",
-    "install-plotly": "npm install vue-plotly"
+    "install-plotly": "npm install vue-plotly",
+    "install-video-player": "npm install vue-video-player@5.0.2 videojs-contrib-hls@5.14.1",
+    "install-vue": "npm install vue@2.6.14",
+    "install-dark-theme": "npm i -D https://github.com/wuchuanxun/DarkElementUI.git"
   },
   "dependencies": {
     "axios": "^0.26.1",
     "element-ui": "^2.15.12",
-    "vue": "^2.5.2",
+    "videojs-contrib-hls": "^5.14.1",
+    "vue": "^2.6.14",
     "vue-plotly": "^1.1.0",
-    "vue-router": "^3.0.1"
+    "vue-router": "^3.0.1",
+    "vue-video-player": "^5.0.2"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",
@@ -32,6 +37,7 @@
     "chalk": "^2.0.1",
     "copy-webpack-plugin": "^4.0.1",
     "css-loader": "^0.28.0",
+    "elementui-dark": "github:wuchuanxun/DarkElementUI",
     "extract-text-webpack-plugin": "^3.0.0",
     "file-loader": "^1.1.4",
     "friendly-errors-webpack-plugin": "^1.6.1",

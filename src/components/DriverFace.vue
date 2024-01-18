@@ -1,5 +1,5 @@
 <template>
-  <div style="margin-top: 30px">
+  <div style="margin-top: 30px; background-color: #FFFFFF; padding-top: 30px">
     <el-row :gutter="40">
       <el-col :span="2" style="margin: auto auto 40px 50px">
         设备位置

@@ -1,16 +1,16 @@
 <template>
-  <div id="app" style="margin: 0 auto">
+  <div id="app" :style="bg">
     <el-container>
       <el-header style="padding: 0">
         <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect"
-                 :router="true" style="height: 100%"
-                 background-color="#545c64" text-color="#fff" active-text-color="#ffd04b">
-          <el-menu-item index="index" style="font-size: 18px">基于人工智能的建造安全管理创新示范</el-menu-item>
-          <el-menu-item index="equip" style="font-size: 18px">人员识别</el-menu-item>
-          <el-menu-item index="driverFace" style="font-size: 18px">驾驶室动作</el-menu-item>
-          <el-menu-item index="excavatorState" style="font-size: 18px">大型设备</el-menu-item>
-          <el-menu-item index="driverAction" style="font-size: 18px">设备操作</el-menu-item>
-          <el-menu-item index="waveRecognition" style="font-size: 18px">声纹识别</el-menu-item>
+                 :router="true" style="height: 100%; border-bottom: none; font-weight: bolder"
+                 background-color="#154360" text-color="#fff" active-text-color="#ffd04b">
+          <el-menu-item index="index" style="font-size: 28px">基于人工智能的建造安全管理创新示范</el-menu-item>
+          <el-menu-item index="equip" style="font-size: 28px">人员识别</el-menu-item>
+          <el-menu-item index="driverFace" style="font-size: 28px">驾驶室动作</el-menu-item>
+          <el-menu-item index="excavatorState" style="font-size: 28px">大型设备</el-menu-item>
+          <el-menu-item index="driverAction" style="font-size: 28px">设备操作</el-menu-item>
+          <el-menu-item index="waveRecognition" style="font-size: 28px">声纹识别</el-menu-item>
           <div>
             <el-image :src="require('@/assets/tongji-w.png')" fit="scale-down"
                       style="height: 80%; margin: 5px auto auto auto; position: absolute; right: 5%"></el-image>
@@ -48,7 +48,13 @@ export default {
   data() {
     return {
       activeIndex: 'index',
-      sumPicNum: 0
+      sumPicNum: 0,
+      bg:{
+        backgroundImage: "url(" + require("@/assets/bg3.jpg") + ")",
+        // backgroundRepeat: "no-repeat",
+        backgroundSize: "cover",
+        margin: "0 auto",
+      },
     };
   },
   methods: {

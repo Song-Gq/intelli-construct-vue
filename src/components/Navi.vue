@@ -1,58 +1,62 @@
 <template>
-  <div style="margin-top: 30px">
+  <div margin-top="30px">
     <div v-show="in_prog">
       {{prog_text}}
       <el-progress :percentage="prog" style="margin: 5px auto 50px auto; width: 80%"
                    :text-inside="true" :stroke-width="26" :status="prog_stat"></el-progress>
     </div>
-    <el-row :gutter="40">
-<!--      <DriverActionBatch></DriverActionBatch>-->
-<!--      <el-col :span="1">-->
-<!--        <el-upload-->
-<!--          class="upload-demo"-->
-<!--          action="#"-->
-<!--          :multiple="true"-->
-<!--          :auto-upload="false"-->
-<!--          :on-change="handleChange"-->
-<!--          :file-list="fileList"-->
-<!--          :disabled="in_prog"-->
-<!--          :show-file-list="false"-->
-<!--          style="float: left; margin-left: 150%">-->
-<!--          <el-button slot="trigger" size="small" type="primary" :disabled="in_prog" style="font-size: 14px">-->
-<!--            批量选取JSON</el-button>-->
-<!--        </el-upload>-->
-<!--      </el-col>-->
-<!--      <el-col :span="3" style="pointer-events: none">-->
-<!--        <el-upload-->
-<!--          class="upload"-->
-<!--          ref="upload"-->
-<!--          action="#"-->
-<!--          :multiple="true"-->
-<!--          :auto-upload="false"-->
-<!--          :on-change="handleChange"-->
-<!--          :file-list="fileList"-->
-<!--          :disabled="in_prog">-->
-<!--          <div slot="tip" class="el-upload__tip" style="margin-top: 30px; font-size: 14px">-->
-<!--            文件大小不能超过10MB</div>-->
-<!--          <div slot="tip" class="el-upload__tip" style="margin-top: 5px; font-size: 14px">-->
-<!--            选取文件数：{{chosenfilenum}}</div>-->
-<!--        </el-upload>-->
-<!--      </el-col>-->
-<!--      <el-col :span="1">-->
-<!--        <el-button style="float: right; margin-right: 150%; font-size: 14px" size="small" type="success"-->
-<!--                   v-if="fileList.length === 0" :disabled="true">开始识别</el-button>-->
-<!--        <el-button style="float: right; margin-right: 150%; font-size: 14px" size="small" type="success"-->
-<!--                   @click="submitUpload" v-if="fileList.length !== 0" :disabled="in_prog">开始识别</el-button>-->
-<!--      </el-col>-->
-<!--      <el-col :span="19">-->
-<!--        <div v-show="in_prog">-->
-<!--          {{prog_text}}-->
-<!--          <el-progress :percentage="prog" style="margin: 5px auto 50px auto; width: 80%"-->
-<!--                       :text-inside="true" :stroke-width="26" :status="prog_stat"></el-progress>-->
-<!--        </div>-->
-<!--      </el-col>-->
-    </el-row>
-    <iframe style="margin-top: 40px" width="1120" height="630" src="//player.bilibili.com/player.html?aid=764029001&bvid=BV1Ur4y1C73M&cid=438374904&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+    <div>
+      <div style="font-weight: bolder; font-size: larger; color: #FFF; float: left; margin-left: 400px">
+        CAM1 挖机工作状态识别
+      </div>
+      <div style="font-weight: bolder; font-size: larger; color: #FFF; float: left; margin-left: 600px">
+        CAM2 人体异常行为识别
+      </div>
+      <div style="font-weight: bolder; font-size: larger; color: #FFF; float: right; margin-right: 300px">
+        CAM3 挖机工作状态识别
+      </div>
+    </div>
+    <video height="950" src="/static/vid2-h264.mp4"
+           style="float: right; margin: 20px 20px; padding-right: 100px"
+           autoplay="autoplay"></video>
+    <div>
+      <div>
+        <video width="800" src="/static/vid1.mp4" style="margin: 20px"
+               autoplay="autoplay"></video>
+        <video width="800" src="/static/vid3-h264.mp4" style="margin: 20px"
+               autoplay="autoplay"></video>
+
+      </div>
+      <div>
+        <video width="800" src="/static/vid4-h264.mp4" style="margin: 20px"
+               autoplay="autoplay"></video>
+        <video width="800" src="/static/vid5-h264.mp4" style="margin: 20px"
+               autoplay="autoplay"></video>
+      </div>
+      <div>
+        <div style="font-weight: bolder; font-size: larger; color: #FFF; float: left; margin-left: 400px">
+          CAM4 人体异常行为识别
+        </div>
+        <div style="font-weight: bolder; font-size: larger; color: #FFF; float: left; margin-left: 600px">
+          CAM5 人体异常行为识别
+        </div>
+      </div>
+    </div>
+<!--    <div style="margin-top: 40px;">-->
+<!--      <Equip></Equip>-->
+<!--    </div>-->
+<!--    <div style="margin-top: 40px;">-->
+<!--      <DriverFace></DriverFace>-->
+<!--    </div>-->
+<!--    <div style="margin-top: 40px;">-->
+<!--      <ExcavatorState></ExcavatorState>-->
+<!--    </div>-->
+<!--    <div style="margin-top: 40px;">-->
+<!--      <DriverAction></DriverAction>-->
+<!--    </div>-->
+<!--    <div style="margin-top: 40px;">-->
+<!--      <WaveRecognition></WaveRecognition>-->
+<!--    </div>-->
   </div>
 </template>
 
@@ -60,11 +64,22 @@
 import axios from "axios";
 import DriverActionBatch from "./batch/DriverActionBatch";
 import Loc2d from "./plotly/Loc2d";
+import Equip from "./Equip";
+import DriverFace from "./DriverFace";
+import ExcavatorState from "./ExcavatorState";
+import DriverAction from "./DriverAction";
+import WaveRecognition from "./WaveRecognition";
+
 
 export default {
   name: "Navi",
   components: {
-    DriverActionBatch
+    DriverActionBatch,
+    Equip,
+    DriverFace,
+    ExcavatorState,
+    DriverAction,
+    WaveRecognition
   },
   data() {
     return {

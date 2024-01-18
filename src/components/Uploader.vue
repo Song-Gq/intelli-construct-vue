@@ -1,5 +1,5 @@
 <template>
-  <div style="margin-top: 30px">
+  <div style="margin-top: 30px; background-color: #FFFFFF; padding-top: 30px">
     <div v-show="in_prog">
     {{prog_text}}
     <el-progress :percentage="prog" style="margin: 5px auto 50px auto; width: 80%"
