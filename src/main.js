@@ -15,7 +15,10 @@ Vue.config.productionTip = false
 Vue.use(ElementUI);
 Vue.prototype.$axios = axios
 // let targetDomain = 'https://x.gqsong.xyz:443'
-let targetDomain = 'http://localhost:5001'
+// local debug
+// let targetDomain = 'http://localhost:5001'
+// local deployment
+let targetDomain = 'http://localhost:8888'
 Vue.prototype.$targetDomain = targetDomain
 
 // axios.defaults.baseURL='/api'

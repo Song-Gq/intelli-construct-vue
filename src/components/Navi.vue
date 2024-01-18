@@ -18,20 +18,20 @@
     </div>
     <video height="950" src="/static/vid2-h264.mp4"
            style="float: right; margin: 20px 20px; padding-right: 100px"
-           autoplay="autoplay"></video>
+           autoplay="autoplay" loop></video>
     <div>
       <div>
         <video width="800" src="/static/vid1.mp4" style="margin: 20px"
-               autoplay="autoplay"></video>
+               autoplay="autoplay" loop></video>
         <video width="800" src="/static/vid3-h264.mp4" style="margin: 20px"
-               autoplay="autoplay"></video>
+               autoplay="autoplay" loop></video>
 
       </div>
       <div>
         <video width="800" src="/static/vid4-h264.mp4" style="margin: 20px"
-               autoplay="autoplay"></video>
+               autoplay="autoplay" loop></video>
         <video width="800" src="/static/vid5-h264.mp4" style="margin: 20px"
-               autoplay="autoplay"></video>
+               autoplay="autoplay" loop></video>
       </div>
       <div>
         <div style="font-weight: bolder; font-size: larger; color: #FFF; float: left; margin-left: 400px">
